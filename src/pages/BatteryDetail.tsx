@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Battery, BatteryFull, BatteryLow, BatteryMedium, Bolt, Building, Info } from 'lucide-react';
+import { ArrowLeft, Battery, BatteryFull, BatteryLow, BatteryMedium, Bolt, Building, Info, Smartphone, Tv, Watch, Camera, Lightbulb, Radio, Car } from 'lucide-react';
 import Header from '@/components/Header';
 import { BatteryType } from '@/components/BatteryCard';
 
@@ -64,6 +64,32 @@ const BATTERY_APPLICATIONS: Record<string, string[]> = {
   '4': ['Remote Controls', 'Toys', 'Digital Cameras', 'Wireless Peripherals'],
   '5': ['High-Drain Devices', 'Flashlights', 'Radio Receivers', 'Toys'],
   '6': ['Electric Vehicles', 'Power Banks', 'Power Tools', 'E-bikes']
+};
+
+// Map applications to appropriate icons
+const APPLICATION_ICONS: Record<string, React.ReactNode> = {
+  'Remote Controls': <Tv className="h-4 w-4" />,
+  'Toys': <Radio className="h-4 w-4" />,
+  'Flashlights': <Lightbulb className="h-4 w-4" />,
+  'Clocks': <Watch className="h-4 w-4" />,
+  'Laptop Battery Packs': <Smartphone className="h-4 w-4" />,
+  'Power Tools': <Bolt className="h-4 w-4" />,
+  'Electric Vehicles': <Car className="h-4 w-4" />,
+  'Watches': <Watch className="h-4 w-4" />,
+  'Calculators': <Smartphone className="h-4 w-4" />,
+  'Car Key Fobs': <Car className="h-4 w-4" />,
+  'Medical Devices': <Info className="h-4 w-4" />,
+  'Digital Cameras': <Camera className="h-4 w-4" />,
+  'Wireless Peripherals': <Radio className="h-4 w-4" />,
+  'High-Drain Devices': <Bolt className="h-4 w-4" />,
+  'Radio Receivers': <Radio className="h-4 w-4" />,
+  'Power Banks': <Battery className="h-4 w-4" />,
+  'E-bikes': <Car className="h-4 w-4" />
+};
+
+// Function to get icon for application
+const getApplicationIcon = (application: string) => {
+  return APPLICATION_ICONS[application] || <Info className="h-4 w-4" />;
 };
 
 const BATTERY_SPECIFICATIONS: Record<string, Record<string, string | number>> = {
@@ -227,14 +253,17 @@ const BatteryDetail = () => {
                   <Bolt className="h-5 w-5 text-primary mr-2" />
                   <h2 className="text-xl font-medium">Common Applications</h2>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {applications.map((app) => (
-                    <span 
+                    <div 
                       key={app}
-                      className="px-3 py-1.5 bg-muted text-muted-foreground rounded-full text-sm"
+                      className="flex items-center p-3 bg-muted/40 rounded-lg hover:bg-muted/60 transition-colors"
                     >
-                      {app}
-                    </span>
+                      <div className="mr-3 p-2 rounded-full bg-primary/10 text-primary">
+                        {getApplicationIcon(app)}
+                      </div>
+                      <span className="text-sm font-medium">{app}</span>
+                    </div>
                   ))}
                 </div>
               </div>
