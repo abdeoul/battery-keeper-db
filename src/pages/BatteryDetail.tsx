@@ -1,8 +1,10 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Battery, BatteryFull, BatteryLow, BatteryMedium, Bolt, Building, Info, Smartphone, Tv, Watch, Camera, Lightbulb, Radio, Car } from 'lucide-react';
 import Header from '@/components/Header';
 import { BatteryType } from '@/components/BatteryCard';
+import { useToast } from '@/hooks/use-toast';
+import BatteryService from '@/services/BatteryService';
 
 // Mock battery data
 const mockBatteries: Record<string, BatteryType> = {
@@ -197,7 +199,26 @@ const BATTERY_SPECIFICATIONS: Record<string, Record<string, string | number>> = 
 
 const BatteryDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const battery = id ? mockBatteries[id] : null;
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [battery, setBattery] = useState<BatteryType | null>(null);
+  
+  useEffect(() => {
+    if (id) {
+      const foundBattery = BatteryService.getBatteryById(id);
+      
+      if (foundBattery) {
+        setBattery(foundBattery);
+      } else {
+        toast({
+          title: "Battery Not Found",
+          description: "The battery you're looking for doesn't exist in our database.",
+          variant: "destructive"
+        });
+        navigate('/database');
+      }
+    }
+  }, [id, navigate, toast]);
   
   if (!battery) {
     return (

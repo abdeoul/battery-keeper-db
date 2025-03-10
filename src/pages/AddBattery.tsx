@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { BatteryFull, ArrowLeft, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
+import BatteryService from '@/services/BatteryService';
 
 const batteryTypes = [
   'Lithium-Ion',
@@ -43,21 +44,26 @@ const AddBattery = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // In a real application, this would be an API call to store the battery
-    // For now, we'll simulate an API call with a timeout
-    setTimeout(() => {
-      // Generate a random ID for the new battery
-      const newBatteryId = Math.floor(Math.random() * 1000).toString();
+    try {
+      // Add the new battery to our service
+      const newBattery = BatteryService.addBattery(formData);
       
       toast({
         title: "Battery Added",
         description: `${formData.name} has been added to the database.`,
       });
       
-      setIsSubmitting(false);
       // Redirect to the battery detail page
-      navigate(`/battery/${newBatteryId}`);
-    }, 800);
+      navigate(`/battery/${newBattery.id}`);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error adding the battery. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (

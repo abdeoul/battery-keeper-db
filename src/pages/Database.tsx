@@ -1,75 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
 import BatteryCard, { BatteryType } from '@/components/BatteryCard';
 import { Battery, Filter } from 'lucide-react';
-
-// Mock battery data
-const mockBatteries: BatteryType[] = [
-  {
-    id: '1',
-    name: 'AA Alkaline',
-    type: 'Alkaline',
-    voltage: 1.5,
-    capacity: 2700,
-    manufacturer: 'Duracell'
-  },
-  {
-    id: '2',
-    name: '18650',
-    type: 'Lithium-ion',
-    voltage: 3.7,
-    capacity: 3500,
-    manufacturer: 'Samsung'
-  },
-  {
-    id: '3',
-    name: 'CR2032',
-    type: 'Lithium',
-    voltage: 3.0,
-    capacity: 240,
-    manufacturer: 'Panasonic'
-  },
-  {
-    id: '4',
-    name: 'AAA Rechargeable',
-    type: 'Ni-MH',
-    voltage: 1.2,
-    capacity: 800,
-    manufacturer: 'Energizer'
-  },
-  {
-    id: '5',
-    name: 'D Cell',
-    type: 'Alkaline',
-    voltage: 1.5,
-    capacity: 12000,
-    manufacturer: 'Duracell'
-  },
-  {
-    id: '6',
-    name: '21700',
-    type: 'Li-ion',
-    voltage: 3.6,
-    capacity: 5000,
-    manufacturer: 'LG Chem'
-  }
-];
+import BatteryService from '@/services/BatteryService';
 
 const Database = () => {
-  const [batteries, setBatteries] = useState<BatteryType[]>(mockBatteries);
+  const [batteries, setBatteries] = useState<BatteryType[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  useEffect(() => {
+    // Get batteries from the service
+    const loadedBatteries = BatteryService.getBatteries();
+    setBatteries(loadedBatteries);
+  }, []);
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     
     if (!query.trim()) {
-      setBatteries(mockBatteries);
+      setBatteries(BatteryService.getBatteries());
       return;
     }
     
-    const filtered = mockBatteries.filter(battery => 
+    const filtered = BatteryService.getBatteries().filter(battery => 
       battery.name.toLowerCase().includes(query.toLowerCase()) ||
       battery.type.toLowerCase().includes(query.toLowerCase()) ||
       battery.manufacturer.toLowerCase().includes(query.toLowerCase())
