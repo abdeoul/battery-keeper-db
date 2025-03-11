@@ -16,7 +16,16 @@ const BatteryForm = () => {
     voltage: '',
     capacity: '',
     manufacturer: '',
-    imageUrl: ''
+    imageUrl: '',
+    chemistry: '',
+    weight: '',
+    dimensions: '',
+    rechargeable: '',
+    maxDischarge: '',
+    operatingTemp: '',
+    internalResistance: '',
+    energyDensity: '',
+    selfDischargeRate: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,7 +65,7 @@ const BatteryForm = () => {
   };
   
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-sm max-w-2xl mx-auto animate-fade-in">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-sm max-w-4xl mx-auto animate-fade-in">
       <form onSubmit={handleSubmit} className="space-y-6">
         <BatteryFormFields 
           formData={formData}

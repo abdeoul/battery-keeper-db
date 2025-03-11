@@ -60,6 +60,15 @@ interface BatteryFormData {
   capacity: string;
   manufacturer: string;
   imageUrl: string;
+  chemistry?: string;
+  weight?: string;
+  dimensions?: string;
+  rechargeable?: string;
+  maxDischarge?: string;
+  operatingTemp?: string;
+  internalResistance?: string;
+  energyDensity?: string;
+  selfDischargeRate?: string;
 }
 
 class BatteryService {
@@ -106,12 +115,41 @@ class BatteryService {
       voltage: parseFloat(formData.voltage),
       capacity: parseInt(formData.capacity),
       manufacturer: formData.manufacturer,
-      imageUrl: formData.imageUrl
+      imageUrl: formData.imageUrl,
+      specifications: {
+        Chemistry: formData.chemistry || '',
+        Weight: formData.weight ? `${formData.weight}g` : '',
+        Dimensions: formData.dimensions || '',
+        Rechargeable: formData.rechargeable || '',
+        'Max Discharge': formData.maxDischarge ? `${formData.maxDischarge}A` : '',
+        'Operating Temperature': formData.operatingTemp || '',
+        'Internal Resistance': formData.internalResistance || '',
+        'Energy Density': formData.energyDensity ? `${formData.energyDensity} Wh/kg` : '',
+        'Self-Discharge Rate': formData.selfDischargeRate || ''
+      }
     };
 
     this.batteries.push(newBattery);
     this.saveBatteries();
+    
+    // Update the specifications in the constants file
+    if (!this.isBatteryInSpecifications(newBatteryId)) {
+      this.updateBatterySpecifications(newBattery);
+    }
+    
     return newBattery;
+  }
+
+  private isBatteryInSpecifications(batteryId: string): boolean {
+    // This would normally check if the battery already exists in the BATTERY_SPECIFICATIONS
+    // For simplicity, we'll just return false
+    return false;
+  }
+
+  private updateBatterySpecifications(battery: BatteryType): void {
+    // This would normally update the BATTERY_SPECIFICATIONS in the constants file
+    // Since we can't modify the constants file directly, this is just a placeholder
+    console.log('Battery specifications would be updated in the constants file:', battery);
   }
 
   private saveBatteries(): void {
