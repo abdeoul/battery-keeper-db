@@ -1,4 +1,3 @@
-
 import { BatteryType } from '@/components/BatteryCard';
 
 // Initial mock data
@@ -108,6 +107,8 @@ class BatteryService {
 
   public addBattery(formData: BatteryFormData): BatteryType {
     const newBatteryId = (this.batteries.length + 1).toString();
+    
+    // Create new battery with proper type structure
     const newBattery: BatteryType = {
       id: newBatteryId,
       name: formData.name,
@@ -116,18 +117,19 @@ class BatteryService {
       capacity: parseInt(formData.capacity),
       manufacturer: formData.manufacturer,
       imageUrl: formData.imageUrl,
-      specifications: {
-        Chemistry: formData.chemistry || '',
-        Weight: formData.weight ? `${formData.weight}g` : '',
-        Dimensions: formData.dimensions || '',
-        Rechargeable: formData.rechargeable || '',
-        'Max Discharge': formData.maxDischarge ? `${formData.maxDischarge}A` : '',
-        'Operating Temperature': formData.operatingTemp || '',
-        'Internal Resistance': formData.internalResistance || '',
-        'Energy Density': formData.energyDensity ? `${formData.energyDensity} Wh/kg` : '',
-        'Self-Discharge Rate': formData.selfDischargeRate || ''
-      }
+      specifications: {}
     };
+    
+    // Add specifications as separate properties
+    if (formData.chemistry) newBattery.specifications.Chemistry = formData.chemistry;
+    if (formData.weight) newBattery.specifications.Weight = formData.weight;
+    if (formData.dimensions) newBattery.specifications.Dimensions = formData.dimensions;
+    if (formData.rechargeable) newBattery.specifications.Rechargeable = formData.rechargeable;
+    if (formData.maxDischarge) newBattery.specifications['Max Discharge'] = formData.maxDischarge;
+    if (formData.operatingTemp) newBattery.specifications['Operating Temperature'] = formData.operatingTemp;
+    if (formData.internalResistance) newBattery.specifications['Internal Resistance'] = formData.internalResistance;
+    if (formData.energyDensity) newBattery.specifications['Energy Density'] = formData.energyDensity;
+    if (formData.selfDischargeRate) newBattery.specifications['Self-Discharge Rate'] = formData.selfDischargeRate;
 
     this.batteries.push(newBattery);
     this.saveBatteries();

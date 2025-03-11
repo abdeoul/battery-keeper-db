@@ -9,6 +9,7 @@ import Database from "./pages/Database";
 import BatteryDetail from "./pages/BatteryDetail";
 import AddBattery from "./pages/AddBattery";
 import NotFound from "./pages/NotFound";
+import SplashScreen from "./components/SplashScreen";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <SplashScreen />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
