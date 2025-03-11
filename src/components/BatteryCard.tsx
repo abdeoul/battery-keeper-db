@@ -12,6 +12,7 @@ export interface BatteryType {
   capacity: number;
   manufacturer: string;
   imageUrl?: string;
+  specifications?: Record<string, string>;
 }
 
 interface BatteryCardProps {
