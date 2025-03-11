@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
 import BatteryGroups from '@/components/BatteryGroups';
+import BatteryCard from '@/components/BatteryCard'; // Add this import
 import { Battery, Filter, List, Grid } from 'lucide-react';
 import BatteryService from '@/services/BatteryService';
 import { BatteryType } from '@/components/BatteryCard';
