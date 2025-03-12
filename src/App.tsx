@@ -10,6 +10,8 @@ import BatteryDetail from "./pages/BatteryDetail";
 import AddBattery from "./pages/AddBattery";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
+import BatteryGroups from "./pages/BatteryGroups";
+import BatteryGroupDetail from "./pages/BatteryGroupDetail";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/database" element={<Database />} />
           <Route path="/battery/:id" element={<BatteryDetail />} />
           <Route path="/add" element={<AddBattery />} />
+          <Route path="/groups" element={<BatteryGroups />} />
+          <Route path="/groups/:name" element={<BatteryGroupDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

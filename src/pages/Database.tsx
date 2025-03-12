@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
 import BatteryCard, { BatteryType } from '@/components/BatteryCard';
-import { Battery, Filter } from 'lucide-react';
+import { Battery, Filter, Layers } from 'lucide-react';
 import BatteryService from '@/services/BatteryService';
+import { Link } from 'react-router-dom';
 
 const Database = () => {
   const [batteries, setBatteries] = useState<BatteryType[]>([]);
@@ -63,10 +64,16 @@ const Database = () => {
               )}
             </div>
             
-            <button className="btn-secondary flex items-center">
-              <Filter className="h-4 w-4 mr-1" />
-              <span>Filter</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              <Link to="/groups" className="btn-outline flex items-center">
+                <Layers className="h-4 w-4 mr-1" />
+                <span>View Groups</span>
+              </Link>
+              <button className="btn-secondary flex items-center">
+                <Filter className="h-4 w-4 mr-1" />
+                <span>Filter</span>
+              </button>
+            </div>
           </div>
           
           {batteries.length > 0 ? (

@@ -17,9 +17,10 @@ export interface BatteryType {
 
 interface BatteryCardProps {
   battery: BatteryType;
+  isGroupView?: boolean;
 }
 
-const BatteryCard = ({ battery }: BatteryCardProps) => {
+const BatteryCard = ({ battery, isGroupView = false }: BatteryCardProps) => {
   // Choose icon based on battery type
   const getBatteryIcon = () => {
     switch (battery.type.toLowerCase()) {
@@ -61,6 +62,11 @@ const BatteryCard = ({ battery }: BatteryCardProps) => {
             <div className="text-sm col-span-2">
               <span className="text-muted-foreground">Type:</span> {battery.type}
             </div>
+            {isGroupView && (
+              <div className="text-sm col-span-2 mt-1">
+                <span className="text-muted-foreground">ID:</span> {battery.id}
+              </div>
+            )}
           </div>
         </div>
       </div>
