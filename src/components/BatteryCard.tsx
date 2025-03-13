@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Battery, BatteryFull, BatteryLow, BatteryMedium, Trash2 } from 'lucide-react';
+import { Battery, BatteryFull, BatteryLow, BatteryMedium, Trash2, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface BatteryType {
@@ -80,15 +80,26 @@ const BatteryCard = ({ battery, isGroupView = false, onRemove }: BatteryCardProp
         </div>
       </div>
       
-      {onRemove && (
-        <button 
-          onClick={handleRemove}
-          className="absolute top-2 right-2 p-1.5 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition-colors"
-          aria-label="Remove battery"
+      <div className="absolute top-2 right-2 flex space-x-1">
+        <Link
+          to={`/edit/${battery.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="p-1.5 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition-colors"
+          aria-label="Edit battery"
         >
-          <Trash2 className="h-4 w-4" />
-        </button>
-      )}
+          <Pencil className="h-4 w-4" />
+        </Link>
+        
+        {onRemove && (
+          <button 
+            onClick={handleRemove}
+            className="p-1.5 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition-colors"
+            aria-label="Remove battery"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
+      </div>
     </Link>
   );
 };

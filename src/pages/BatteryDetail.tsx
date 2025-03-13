@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Battery, Trash2 } from 'lucide-react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Battery, Trash2, Pencil } from 'lucide-react';
 import Header from '@/components/Header';
 import { BatteryType } from '@/components/BatteryCard';
 import { useToast } from '@/hooks/use-toast';
@@ -85,7 +84,14 @@ const BatteryDetail = () => {
           <div className="flex flex-col lg:flex-row gap-8 mb-12">
             <div className="w-full lg:w-1/3 animate-fade-in">
               <BatteryInfoCard battery={battery} />
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex justify-center space-x-2">
+                <Link 
+                  to={`/edit/${battery.id}`}
+                  className="flex items-center gap-2 py-2 px-4 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-md transition-colors"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit Battery
+                </Link>
                 <button 
                   onClick={handleRemoveBattery}
                   className="flex items-center gap-2 py-2 px-4 bg-red-100 hover:bg-red-200 text-red-600 rounded-md transition-colors"

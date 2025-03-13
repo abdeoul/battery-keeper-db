@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Database from "./pages/Database";
 import BatteryDetail from "./pages/BatteryDetail";
 import AddBattery from "./pages/AddBattery";
+import EditBattery from "./pages/EditBattery";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import BatteryGroups from "./pages/BatteryGroups";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/database" element={<Database />} />
           <Route path="/battery/:id" element={<BatteryDetail />} />
           <Route path="/add" element={<AddBattery />} />
+          <Route path="/edit/:id" element={<EditBattery />} />
           <Route path="/groups" element={<BatteryGroups />} />
           <Route path="/groups/:name" element={<BatteryGroupDetail />} />
           <Route path="*" element={<NotFound />} />

@@ -1,4 +1,3 @@
-
 import { BatteryType } from '@/components/BatteryCard';
 
 // Initial mock data
@@ -155,6 +154,44 @@ class BatteryService {
     }
     
     return newBattery;
+  }
+
+  public updateBattery(id: string, formData: BatteryFormData): BatteryType {
+    // Find the battery to update
+    const batteryIndex = this.batteries.findIndex(battery => battery.id === id);
+    
+    if (batteryIndex === -1) {
+      throw new Error('Battery not found');
+    }
+    
+    // Create updated battery object
+    const updatedBattery: BatteryType = {
+      id: id,
+      name: formData.name,
+      type: formData.type,
+      voltage: parseFloat(formData.voltage),
+      capacity: parseInt(formData.capacity),
+      manufacturer: formData.manufacturer,
+      imageUrl: formData.imageUrl,
+      specifications: {}
+    };
+    
+    // Add specifications as separate properties
+    if (formData.chemistry) updatedBattery.specifications!.Chemistry = formData.chemistry;
+    if (formData.weight) updatedBattery.specifications!.Weight = formData.weight;
+    if (formData.dimensions) updatedBattery.specifications!.Dimensions = formData.dimensions;
+    if (formData.rechargeable) updatedBattery.specifications!.Rechargeable = formData.rechargeable;
+    if (formData.maxDischarge) updatedBattery.specifications!['Max Discharge'] = formData.maxDischarge;
+    if (formData.operatingTemp) updatedBattery.specifications!['Operating Temperature'] = formData.operatingTemp;
+    if (formData.internalResistance) updatedBattery.specifications!['Internal Resistance'] = formData.internalResistance;
+    if (formData.energyDensity) updatedBattery.specifications!['Energy Density'] = formData.energyDensity;
+    if (formData.selfDischargeRate) updatedBattery.specifications!['Self-Discharge Rate'] = formData.selfDischargeRate;
+    
+    // Update the battery in the array
+    this.batteries[batteryIndex] = updatedBattery;
+    this.saveBatteries();
+    
+    return updatedBattery;
   }
 
   private isBatteryInSpecifications(batteryId: string): boolean {
