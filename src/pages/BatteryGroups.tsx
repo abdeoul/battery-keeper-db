@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
-import { ChevronRight, Database, Layers } from 'lucide-react';
+import { Battery, ChevronRight, Database, Layers } from 'lucide-react';
 import { getBatteryGroups, BatteryGroup } from '@/services/BatteryGroups';
 
 const BatteryGroups = () => {
