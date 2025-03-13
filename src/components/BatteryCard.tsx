@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Battery, BatteryFull, BatteryLow, BatteryMedium } from 'lucide-react';
+import { Battery, BatteryFull, BatteryLow, BatteryMedium, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface BatteryType {
@@ -18,9 +18,10 @@ export interface BatteryType {
 interface BatteryCardProps {
   battery: BatteryType;
   isGroupView?: boolean;
+  onRemove?: (id: string) => void;
 }
 
-const BatteryCard = ({ battery, isGroupView = false }: BatteryCardProps) => {
+const BatteryCard = ({ battery, isGroupView = false, onRemove }: BatteryCardProps) => {
   // Choose icon based on battery type
   const getBatteryIcon = () => {
     switch (battery.type.toLowerCase()) {
@@ -37,11 +38,19 @@ const BatteryCard = ({ battery, isGroupView = false }: BatteryCardProps) => {
     }
   };
 
+  const handleRemove = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onRemove) {
+      onRemove(battery.id);
+    }
+  };
+
   return (
     <Link 
       to={`/battery/${battery.id}`}
       className={cn(
-        "block p-4 rounded-xl bg-card border border-border shadow-sm card-hover animate-scale-in",
+        "block p-4 rounded-xl bg-card border border-border shadow-sm card-hover animate-scale-in relative",
         "focus:outline-none focus:ring-2 focus:ring-primary/50"
       )}
     >
@@ -70,6 +79,16 @@ const BatteryCard = ({ battery, isGroupView = false }: BatteryCardProps) => {
           </div>
         </div>
       </div>
+      
+      {onRemove && (
+        <button 
+          onClick={handleRemove}
+          className="absolute top-2 right-2 p-1.5 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition-colors"
+          aria-label="Remove battery"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
     </Link>
   );
 };

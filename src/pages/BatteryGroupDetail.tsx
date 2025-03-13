@@ -1,28 +1,26 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
-import BatteryCard from '@/components/BatteryCard';
-import { Battery, ChevronRight, Database, Layers } from 'lucide-react';
-import { getBatteryGroupByName } from '@/services/BatteryGroups';
+import BatteryCard, { BatteryType } from '@/components/BatteryCard';
 import { useToast } from '@/hooks/use-toast';
+import { getBatteryGroupByName } from '@/services/BatteryGroups';
+import BatteryService from '@/services/BatteryService';
 
 const BatteryGroupDetail = () => {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [batteries, setBatteries] = useState<BatteryType[]>([]);
   const [groupName, setGroupName] = useState<string>('');
-  const [batteries, setBatteries] = useState<any[]>([]);
-  
+
   useEffect(() => {
     if (name) {
-      const decodedName = decodeURIComponent(name);
-      setGroupName(decodedName);
-      
-      const group = getBatteryGroupByName(decodedName);
-      
+      const group = getBatteryGroupByName(name);
       if (group) {
         setBatteries(group.batteries);
+        setGroupName(group.name);
       } else {
         toast({
           title: "Group Not Found",
@@ -33,70 +31,84 @@ const BatteryGroupDetail = () => {
       }
     }
   }, [name, navigate, toast]);
-  
+
+  const handleRemoveBattery = (id: string) => {
+    const batteryToRemove = batteries.find(battery => battery.id === id);
+    
+    if (batteryToRemove) {
+      const success = BatteryService.removeBattery(id);
+      
+      if (success) {
+        setBatteries(prevBatteries => prevBatteries.filter(battery => battery.id !== id));
+        
+        toast({
+          title: "Battery Removed",
+          description: `${batteryToRemove.name} (ID: ${id}) has been removed from the database.`,
+        });
+        
+        // If last battery in group, go back to groups
+        if (batteries.length <= 1) {
+          navigate('/groups');
+        }
+      } else {
+        toast({
+          title: "Failed to Remove",
+          description: "There was an error removing the battery.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  if (batteries.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 py-8">
+          <div className="max-container">
+            <div className="mb-8">
+              <Link to="/groups" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                Back to Groups
+              </Link>
+            </div>
+            <div className="text-center p-8">
+              <h1 className="text-2xl font-medium mb-4">Group Not Found</h1>
+              <p className="text-muted-foreground mb-6">The battery group you're looking for doesn't exist or is empty.</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 py-8">
         <div className="max-container">
-          <div className="text-center mb-10 animate-fade-in">
-            <span className="inline-block px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full mb-3">
-              Group Detail
-            </span>
-            <h1 className="text-3xl md:text-4xl font-medium mb-4">{groupName}</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Viewing all batteries in the {groupName} series.
-            </p>
-          </div>
-          
-          <div className="flex items-center mb-6">
-            <Link to="/database" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
-              <Database className="h-4 w-4 mr-1" />
-              <span>Database</span>
-            </Link>
-            <ChevronRight className="h-4 w-4 mx-2 text-muted-foreground" />
-            <Link to="/groups" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
-              <Layers className="h-4 w-4 mr-1" />
-              <span>Groups</span>
-            </Link>
-            <ChevronRight className="h-4 w-4 mx-2 text-muted-foreground" />
-            <span className="text-sm font-medium">{groupName}</span>
-          </div>
-          
-          {batteries.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {batteries.map((battery, index) => (
-                <div key={battery.id} style={{ animationDelay: `${index * 50}ms` }}>
-                  <BatteryCard battery={battery} isGroupView={true} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-muted/30 rounded-lg">
-              <p className="text-muted-foreground">No batteries found in this group</p>
-            </div>
-          )}
-          
-          <div className="flex justify-center mt-8">
-            <Link to="/groups" className="btn-secondary">
+          <div className="mb-8">
+            <Link to="/groups" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Groups
             </Link>
           </div>
-        </div>
-      </main>
-      <footer className="border-t border-border py-8">
-        <div className="max-container">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 text-primary mb-4 md:mb-0">
-              <Battery className="h-5 w-5" />
-              <span className="font-medium">BatteryDB</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} BatteryDB. All rights reserved.
-            </p>
+          <h1 className="text-3xl font-bold mb-6">{groupName} Batteries</h1>
+          <p className="text-muted-foreground mb-8">
+            Showing {batteries.length} batteries in this group
+          </p>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {batteries.map(battery => (
+              <BatteryCard 
+                key={battery.id} 
+                battery={battery} 
+                isGroupView={true}
+                onRemove={handleRemoveBattery}
+              />
+            ))}
           </div>
         </div>
-      </footer>
+      </main>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Battery } from 'lucide-react';
+import { Battery, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import { BatteryType } from '@/components/BatteryCard';
 import { useToast } from '@/hooks/use-toast';
@@ -35,6 +35,26 @@ const BatteryDetail = () => {
     }
   }, [id, navigate, toast]);
   
+  const handleRemoveBattery = () => {
+    if (id && battery) {
+      const success = BatteryService.removeBattery(id);
+      
+      if (success) {
+        toast({
+          title: "Battery Removed",
+          description: `${battery.name} has been removed from the database.`,
+        });
+        navigate('/database');
+      } else {
+        toast({
+          title: "Failed to Remove",
+          description: "There was an error removing the battery.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
   if (!battery) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -65,6 +85,15 @@ const BatteryDetail = () => {
           <div className="flex flex-col lg:flex-row gap-8 mb-12">
             <div className="w-full lg:w-1/3 animate-fade-in">
               <BatteryInfoCard battery={battery} />
+              <div className="mt-4 flex justify-center">
+                <button 
+                  onClick={handleRemoveBattery}
+                  className="flex items-center gap-2 py-2 px-4 bg-red-100 hover:bg-red-200 text-red-600 rounded-md transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Remove Battery
+                </button>
+              </div>
             </div>
 
             <div className="w-full lg:w-2/3 space-y-6 animate-slide-up">

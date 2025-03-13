@@ -106,6 +106,20 @@ class BatteryService {
     return this.batteries.find(battery => battery.id === id);
   }
 
+  public removeBattery(id: string): boolean {
+    const initialLength = this.batteries.length;
+    this.batteries = this.batteries.filter(battery => battery.id !== id);
+    
+    // If the array length changed, we successfully removed a battery
+    const success = initialLength > this.batteries.length;
+    
+    if (success) {
+      this.saveBatteries();
+    }
+    
+    return success;
+  }
+
   public addBattery(formData: BatteryFormData): BatteryType {
     const newBatteryId = (this.batteries.length + 1).toString();
     
