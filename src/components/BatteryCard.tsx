@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Battery, BatteryFull, BatteryLow, BatteryMedium, Trash2, Pencil } from 'lucide-react';
@@ -13,6 +12,7 @@ export interface BatteryType {
   manufacturer: string;
   imageUrl?: string;
   specifications?: Record<string, string>;
+  applications?: string[];
 }
 
 interface BatteryCardProps {

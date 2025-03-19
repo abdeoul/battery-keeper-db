@@ -33,7 +33,8 @@ const EditBatteryForm = ({ battery }: EditBatteryFormProps) => {
     operatingTemp: initialSpecs['Operating Temperature'] || '',
     internalResistance: initialSpecs['Internal Resistance'] || '',
     energyDensity: initialSpecs['Energy Density'] || '',
-    selfDischargeRate: initialSpecs['Self-Discharge Rate'] || ''
+    selfDischargeRate: initialSpecs['Self-Discharge Rate'] || '',
+    applications: battery.applications || []
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,6 +45,23 @@ const EditBatteryForm = ({ battery }: EditBatteryFormProps) => {
       ...prev,
       [name]: value
     }));
+  };
+  
+  const handleApplicationToggle = (application: string) => {
+    setFormData(prev => {
+      if (prev.applications.includes(application)) {
+        return {
+          ...prev,
+          applications: prev.applications.filter(app => app !== application)
+        };
+      } 
+      else {
+        return {
+          ...prev,
+          applications: [...prev.applications, application]
+        };
+      }
+    });
   };
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -78,6 +96,7 @@ const EditBatteryForm = ({ battery }: EditBatteryFormProps) => {
         <BatteryFormFields 
           formData={formData}
           handleChange={handleChange}
+          handleApplicationToggle={handleApplicationToggle}
         />
         
         <div className="flex justify-end space-x-4 pt-4">
