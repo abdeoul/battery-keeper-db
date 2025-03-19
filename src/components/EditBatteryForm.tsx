@@ -34,7 +34,10 @@ const EditBatteryForm = ({ battery }: EditBatteryFormProps) => {
     internalResistance: initialSpecs['Internal Resistance'] || '',
     energyDensity: initialSpecs['Energy Density'] || '',
     selfDischargeRate: initialSpecs['Self-Discharge Rate'] || '',
-    applications: battery.applications || []
+    applications: battery.applications || [],
+    cycleLife: initialSpecs['Cycle Life'] || battery.cycleLife?.toString() || '',
+    minVoltage: initialSpecs['Min Voltage'] || battery.minVoltage?.toString() || '',
+    maxVoltage: initialSpecs['Max Voltage'] || battery.maxVoltage?.toString() || ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);

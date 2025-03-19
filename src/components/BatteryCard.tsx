@@ -13,6 +13,9 @@ export interface BatteryType {
   imageUrl?: string;
   specifications?: Record<string, string>;
   applications?: string[];
+  cycleLife?: number;
+  minVoltage?: number;
+  maxVoltage?: number;
 }
 
 interface BatteryCardProps {

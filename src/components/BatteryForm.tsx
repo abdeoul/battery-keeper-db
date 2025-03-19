@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
@@ -25,7 +26,10 @@ const BatteryForm = () => {
     internalResistance: '',
     energyDensity: '',
     selfDischargeRate: '',
-    applications: []
+    applications: [],
+    cycleLife: '',
+    minVoltage: '',
+    maxVoltage: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);

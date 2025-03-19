@@ -1,4 +1,3 @@
-
 import { BatteryType } from '@/components/BatteryCard';
 import { BATTERY_APPLICATIONS } from '@/constants/batteryData';
 
@@ -71,6 +70,9 @@ interface BatteryFormData {
   energyDensity?: string;
   selfDischargeRate?: string;
   applications?: string[];
+  cycleLife?: string;
+  minVoltage?: string;
+  maxVoltage?: string;
 }
 
 class BatteryService {
@@ -135,7 +137,10 @@ class BatteryService {
       manufacturer: formData.manufacturer,
       imageUrl: formData.imageUrl,
       specifications: {},
-      applications: formData.applications || []
+      applications: formData.applications || [],
+      cycleLife: formData.cycleLife ? parseInt(formData.cycleLife) : undefined,
+      minVoltage: formData.minVoltage ? parseFloat(formData.minVoltage) : undefined,
+      maxVoltage: formData.maxVoltage ? parseFloat(formData.maxVoltage) : undefined
     };
     
     // Add specifications as separate properties
@@ -148,6 +153,9 @@ class BatteryService {
     if (formData.internalResistance) newBattery.specifications!['Internal Resistance'] = formData.internalResistance;
     if (formData.energyDensity) newBattery.specifications!['Energy Density'] = formData.energyDensity;
     if (formData.selfDischargeRate) newBattery.specifications!['Self-Discharge Rate'] = formData.selfDischargeRate;
+    if (formData.cycleLife) newBattery.specifications!['Cycle Life'] = formData.cycleLife;
+    if (formData.minVoltage) newBattery.specifications!['Min Voltage'] = formData.minVoltage;
+    if (formData.maxVoltage) newBattery.specifications!['Max Voltage'] = formData.maxVoltage;
 
     this.batteries.push(newBattery);
     this.saveBatteries();
@@ -178,7 +186,10 @@ class BatteryService {
       manufacturer: formData.manufacturer,
       imageUrl: formData.imageUrl,
       specifications: {},
-      applications: formData.applications || []
+      applications: formData.applications || [],
+      cycleLife: formData.cycleLife ? parseInt(formData.cycleLife) : undefined,
+      minVoltage: formData.minVoltage ? parseFloat(formData.minVoltage) : undefined,
+      maxVoltage: formData.maxVoltage ? parseFloat(formData.maxVoltage) : undefined
     };
     
     // Add specifications as separate properties
@@ -191,6 +202,9 @@ class BatteryService {
     if (formData.internalResistance) updatedBattery.specifications!['Internal Resistance'] = formData.internalResistance;
     if (formData.energyDensity) updatedBattery.specifications!['Energy Density'] = formData.energyDensity;
     if (formData.selfDischargeRate) updatedBattery.specifications!['Self-Discharge Rate'] = formData.selfDischargeRate;
+    if (formData.cycleLife) updatedBattery.specifications!['Cycle Life'] = formData.cycleLife;
+    if (formData.minVoltage) updatedBattery.specifications!['Min Voltage'] = formData.minVoltage;
+    if (formData.maxVoltage) updatedBattery.specifications!['Max Voltage'] = formData.maxVoltage;
     
     // Update the battery in the array
     this.batteries[batteryIndex] = updatedBattery;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { APPLICATION_ICONS } from '@/constants/batteryData';
 
@@ -69,6 +70,9 @@ interface BatteryFormData {
   energyDensity: string;
   selfDischargeRate: string;
   applications: string[];
+  cycleLife: string;
+  minVoltage: string;
+  maxVoltage: string;
 }
 
 interface BatteryFormFieldsProps {
@@ -264,6 +268,34 @@ const BatteryFormFields = ({ formData, handleChange, handleApplicationToggle }: 
             value={formData.selfDischargeRate}
             onChange={handleChange}
             placeholder="e.g. <5% per month"
+          />
+          
+          {/* New fields for Cycle Life, Min Voltage, and Max Voltage */}
+          <FormField
+            id="cycleLife"
+            label="Cycle Life (cycles)"
+            type="text"
+            value={formData.cycleLife}
+            onChange={handleChange}
+            placeholder="e.g. 500"
+          />
+          
+          <FormField
+            id="minVoltage"
+            label="Min Voltage (V)"
+            type="text"
+            value={formData.minVoltage}
+            onChange={handleChange}
+            placeholder="e.g. 2.5"
+          />
+          
+          <FormField
+            id="maxVoltage"
+            label="Max Voltage (V)"
+            type="text"
+            value={formData.maxVoltage}
+            onChange={handleChange}
+            placeholder="e.g. 4.2"
           />
         </div>
       </div>
