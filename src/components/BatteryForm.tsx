@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
@@ -25,7 +24,8 @@ const BatteryForm = () => {
     operatingTemp: '',
     internalResistance: '',
     energyDensity: '',
-    selfDischargeRate: ''
+    selfDischargeRate: '',
+    applications: []
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,12 +38,28 @@ const BatteryForm = () => {
     }));
   };
   
+  const handleApplicationToggle = (application: string) => {
+    setFormData(prev => {
+      if (prev.applications.includes(application)) {
+        return {
+          ...prev,
+          applications: prev.applications.filter(app => app !== application)
+        };
+      } 
+      else {
+        return {
+          ...prev,
+          applications: [...prev.applications, application]
+        };
+      }
+    });
+  };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     try {
-      // Add the new battery to our service
       const newBattery = BatteryService.addBattery(formData);
       
       toast({
@@ -51,7 +67,6 @@ const BatteryForm = () => {
         description: `${formData.name} has been added to the database.`,
       });
       
-      // Redirect to the battery detail page
       navigate(`/battery/${newBattery.id}`);
     } catch (error) {
       toast({
@@ -70,6 +85,7 @@ const BatteryForm = () => {
         <BatteryFormFields 
           formData={formData}
           handleChange={handleChange}
+          handleApplicationToggle={handleApplicationToggle}
         />
         
         <div className="flex justify-end space-x-4 pt-4">

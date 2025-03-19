@@ -1,4 +1,6 @@
+
 import { BatteryType } from '@/components/BatteryCard';
+import { BATTERY_APPLICATIONS } from '@/constants/batteryData';
 
 // Initial mock data
 const initialBatteries: BatteryType[] = [
@@ -68,6 +70,7 @@ interface BatteryFormData {
   internalResistance?: string;
   energyDensity?: string;
   selfDischargeRate?: string;
+  applications?: string[];
 }
 
 class BatteryService {
@@ -131,7 +134,8 @@ class BatteryService {
       capacity: parseInt(formData.capacity),
       manufacturer: formData.manufacturer,
       imageUrl: formData.imageUrl,
-      specifications: {}
+      specifications: {},
+      applications: formData.applications || []
     };
     
     // Add specifications as separate properties
@@ -148,9 +152,9 @@ class BatteryService {
     this.batteries.push(newBattery);
     this.saveBatteries();
     
-    // Update the specifications in the constants file
-    if (!this.isBatteryInSpecifications(newBatteryId)) {
-      this.updateBatterySpecifications(newBattery);
+    // Update the battery applications in the constants file
+    if (!this.isBatteryInApplications(newBatteryId) && formData.applications && formData.applications.length > 0) {
+      this.updateBatteryApplications(newBatteryId, formData.applications);
     }
     
     return newBattery;
@@ -173,7 +177,8 @@ class BatteryService {
       capacity: parseInt(formData.capacity),
       manufacturer: formData.manufacturer,
       imageUrl: formData.imageUrl,
-      specifications: {}
+      specifications: {},
+      applications: formData.applications || []
     };
     
     // Add specifications as separate properties
@@ -191,13 +196,28 @@ class BatteryService {
     this.batteries[batteryIndex] = updatedBattery;
     this.saveBatteries();
     
+    // Update the battery applications in the constants file
+    if (formData.applications && formData.applications.length > 0) {
+      this.updateBatteryApplications(id, formData.applications);
+    }
+    
     return updatedBattery;
+  }
+
+  private isBatteryInApplications(batteryId: string): boolean {
+    return batteryId in BATTERY_APPLICATIONS;
   }
 
   private isBatteryInSpecifications(batteryId: string): boolean {
     // This would normally check if the battery already exists in the BATTERY_SPECIFICATIONS
     // For simplicity, we'll just return false
     return false;
+  }
+
+  private updateBatteryApplications(batteryId: string, applications: string[]): void {
+    // This would normally update the BATTERY_APPLICATIONS in the constants file
+    // Since we can't modify the constants file directly, this is just a placeholder
+    console.log('Battery applications would be updated in the constants file:', { batteryId, applications });
   }
 
   private updateBatterySpecifications(battery: BatteryType): void {

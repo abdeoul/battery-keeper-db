@@ -2,13 +2,31 @@
 import React from 'react';
 import { Bolt, Tv, Watch, Camera, Lightbulb, Radio, Car, Smartphone, Info, Battery } from 'lucide-react';
 import { BATTERY_APPLICATIONS } from '@/constants/batteryData';
+import BatteryService from '@/services/BatteryService';
 
 interface BatteryApplicationsProps {
   batteryId: string;
 }
 
 const BatteryApplications: React.FC<BatteryApplicationsProps> = ({ batteryId }) => {
-  const applications = BATTERY_APPLICATIONS[batteryId] || [];
+  // First try to get applications from the battery object
+  const battery = BatteryService.getBatteryById(batteryId);
+  
+  // If the battery has applications, use those. Otherwise, fall back to constants
+  const applications = battery?.applications || BATTERY_APPLICATIONS[batteryId] || [];
+  
+  // Skip rendering if no applications are available
+  if (applications.length === 0) {
+    return (
+      <div className="bg-card rounded-xl border border-border shadow-sm p-6">
+        <div className="flex items-center mb-4">
+          <Bolt className="h-5 w-5 text-primary mr-2" />
+          <h2 className="text-xl font-medium">Common Applications</h2>
+        </div>
+        <p className="text-muted-foreground">No applications available for this battery.</p>
+      </div>
+    );
+  }
 
   // Function to get icon for application
   const getApplicationIcon = (application: string) => {

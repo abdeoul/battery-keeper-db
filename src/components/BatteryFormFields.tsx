@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { APPLICATION_ICONS } from '@/constants/batteryData';
 
 // Battery types array as a constant
 export const batteryTypes = [
@@ -68,14 +69,19 @@ interface BatteryFormData {
   internalResistance: string;
   energyDensity: string;
   selfDischargeRate: string;
+  applications: string[];
 }
 
 interface BatteryFormFieldsProps {
   formData: BatteryFormData;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  handleApplicationToggle: (application: string) => void;
 }
 
-const BatteryFormFields = ({ formData, handleChange }: BatteryFormFieldsProps) => {
+const BatteryFormFields = ({ formData, handleChange, handleApplicationToggle }: BatteryFormFieldsProps) => {
+  // Get all possible applications from the APPLICATION_ICONS object
+  const allApplications = Object.keys(APPLICATION_ICONS);
+  
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -146,6 +152,25 @@ const BatteryFormFields = ({ formData, handleChange }: BatteryFormFieldsProps) =
           onChange={handleChange}
           placeholder="https://example.com/battery-image.jpg"
         />
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-medium mb-4">Common Applications</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {allApplications.map(application => (
+            <div 
+              key={application}
+              onClick={() => handleApplicationToggle(application)}
+              className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors ${
+                formData.applications.includes(application) 
+                  ? 'bg-primary/20 border border-primary/30' 
+                  : 'bg-muted/40 hover:bg-muted/60 border border-transparent'
+              }`}
+            >
+              <span className="text-sm font-medium">{application}</span>
+            </div>
+          ))}
+        </div>
       </div>
       
       <div>
